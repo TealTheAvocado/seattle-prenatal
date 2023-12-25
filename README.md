@@ -1,6 +1,11 @@
 # Seattle Prenatal Clinic
 ## Authors: Sonja Lavin and Flora Zhang
 
+### With the mission of ending childhood poverty through comprehensive family services that promote self-sufficiency and healthful living, Seattle Prenatal provides perinatal services, housing support, job training, and social support to 3,500 low income and homeless families annually. Additionally, Seattle Prenatal frequently hires former clients who have completed their job training programs, with more than half of the 100 staff members coming from the Seattle Prenatal health worker training program. Given the breadth of services offered to a growing number of clients, this database driven website has been designed to track and manage client participation in these services.
+
+
+### The purpose of this website is to record and manage data regarding clients, providers, nonmedical employees, perinatal appointments, and nonmedical services. The database also includes appointment histories to track which appointments individual clients have attended and service histories to track which nonmedical services individual clients have participated in. Create, Read, Update, and Delete (CRUD) functions have been implemented for all entities of the database.
+
 ## Citations
 - Citation for the SETUP, ROUTES, and LISTENER for simple web app, AJAX functions, jquery, table page views:
 Date: 11/09/2023
