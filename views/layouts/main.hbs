@@ -1,0 +1,86 @@
+<!-- main.hbs-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Seattle Prenatal</title>
+
+<meta name="robots" content="noindex,noarchive, nofollow" />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta charset="utf-8">
+<!-- include link to new texts if we add-->
+
+<!-- favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
+<link rel="icon" type="image/png" sizes="192X192" href="favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="img/png" sizes="16x16" href="favicon-16x16.png">
+<link type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="manifest" href="site.webmanifest">
+<link type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<!-- header to appear on every page -->
+<header>
+    <h1>Seattle Prenatal</h1>
+</header>
+
+<!-- top navigation bar to appear on every page-->
+<div class="topnav" id="myTopnav">
+    <a href="/">Home</a>
+    <div class="dropdown">
+      <button class="dropbtn">People
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        <a href="providers.html">Providers</a>
+        <a href="clients.html">Clients</a>
+        <a href="employees.html">Employees</a>
+      </div>
+    </div>
+    <div class="dropdown">
+      <button class="dropbtn">Services
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        <a href="nonMedicalServices.html">Services</a>
+        <a href="serviceHistories.html">Service Histories</a>
+      </div>
+    </div>    <div class="dropdown">
+      <button class="dropbtn">Appointments
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        <a href="perinatalAppointments.html">Appointments</a>
+        <a href="appointmentHistories.html">Appointment Histories</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- handlebars to insert body, specific to each page -->
+  <body>
+    {{{body}}}
+  <article>
+    <p></p>
+    <div class="addbtn">
+        <a class="reset-link" href="/reset-db">Reset Database</a>
+    </div>
+    <!-- display reset message -->
+     {{#if resetMessage}}
+        <script>
+            alert("{{resetMessage}}");
+        </script>
+    {{/if}}
+  </article>
+</body>
+
+
+<!-- footer to appear on every page -->
+  <footer>
+        <p>&copy; 2023 F. Zhang & S. Lavin, Oregon State University</p>
+    </footer>
+
+</html>

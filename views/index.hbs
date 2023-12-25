@@ -1,0 +1,172 @@
+<!--Authors: Sonja Lavin, Flora Zhang
+ Contents: Seattle Prenatal Clinic -->
+<header class="pageHead" id="top">
+    <h2>Welcome</h2>
+</header>
+<main>
+    <section>
+        <article>
+            <p>Welcome to the utilization database for Seattle Prenatal. This is a demonstration site that may be used to browse, update, track, and manage data for a fictitious clinic, Seattle Prenatal (inspired by the Homeless Prenatal Program in San Francisco).</p>
+        <nav>
+            <a href="#overview">Overview</a>
+            <a href="#outline">Outline</a>
+            <a href="#entityRelationshipDiagram">Entity-Relationship Diagram</a>
+            <a href="#schema">Schema</a>
+            <a href="#siteDetails">Site Details</a>
+        
+        </nav>
+        </article>
+        <article id="overview">
+            <h3>Overview</h3>
+            <p>With the mission of ending childhood poverty through comprehensive family services that promote self-sufficiency and healthful living, Seattle Prenatal provides perinatal services, housing support, job training, and social support to 3,500 low income and homeless families annually. Additionally, Seattle Prenatal frequently hires former clients who have completed their job training programs, with more than half of the 100 staff members coming from the Seattle Prenatal health worker training program. Given the breadth of services offered to a growing number of clients, this database driven website has been designed to track and manage client participation in these services.</p>
+
+            <p>The purpose of this website is to record and manage data regarding clients, providers, nonmedical employees, perinatal appointments, and nonmedical services. The database also includes appointment histories to track which appointments individual clients have attended and service histories to track which nonmedical services individual clients have participated in. Create, Read, Update, and Delete (CRUD) functions have been implemented for all entities of the database.</p>
+            <a href="#top">Top</a>
+        </article>
+        <article id="outline">
+            <h3> Database Outline </h3>
+            <ul>
+                <li><h4>Providers</h4> 
+                    <ul>
+                        <li>Records the details of clinical nurse midwives, nurse practitioners, physician assistants, and physicians employed by Seattle Prenatal</li>
+                        </li>
+                        <li>Attibutes:</li>
+                            <ul>
+                                <li>providerID: int, not NULL, auto_increment, PK</li>
+                                <li>firstName: varchar(45), not NULL</li>
+                                <li>lastName: varchar(45), not NULL</li>
+                                <li>phone: varchar(45), not NULL</li>
+                                <li>email: varchar(320), not NULL</li>
+                                <li>title: varchar(45), not NULL</li>
+                            </ul>
+                        <li>Relationships:</li>
+                            <ul>
+                                <li>1:M relationship with Clients. A client may have one primary provider. </li>
+                                <li>M:N relationship with PerinatalAppointments implemented through AppointmentHistories intersection table.</li>
+                            </ul>
+                    </ul>
+                <li><h4>Clients</h4></li>
+                    <ul>
+                        <li>Records the details of clients served by Seattle Prenatal </li>
+                        <li>Attributes:</li>
+                            <ul>
+                                <li>clientID: int, not NULL, auto_increment, PK</li>
+                                <li>firstName: varchar(45), not NULL</li>
+                                <li>lastName: varchar(45), not NULL</li>
+                                <li>birthday: date, not NULL</li>
+                                <li>phone: varchar(45), not NULL</li>       
+                                <li>email: varchar(320), not NULL</li>
+                                <li>providerID: int, FK ON DELETE SET NULL</li>
+                            </ul>
+                        <li>Relationships:</li>
+                            <ul>
+                                <li>M:1 relationship between Clients and Providers is implemented with providerID as a FK inside Clients.</li>
+                                <li>1:M relationship with AppointmentHistories. A Client may attend many perinatal appointments.</li>
+                                <li>1:M relationship with ServiceHistories. A Client can attend many nonmedical services.</li>
+                            </ul>
+                    </ul>
+                <li><h4>PerinatalAppointments</h4></li>
+                    <ul>
+                        <li>Records perinatal appointments offered by Seattle Prenatal</li>
+                        <li>Attributes:</li>
+                            <ul>
+                                <li>perinatalApptID: int, not NULL, auto_increment, PK</li>
+                                <li>name: varchar(255), not NULL</li>
+                                <li>billingCode: varchar(45), not NULL</li>
+                                <li>description: varchar(255), not NULL</li>
+                            </ul>
+                        <li>Relationships:</li>
+                            <ul>
+                                <li>M:N relationship with Providers implemented through the intersection table AppointmentHistories. </li>
+                                <li>1:M relationship with AppointmentHistories. Each appointment history must have one perinatal appointment.</li>
+                            </ul>
+                    </ul>
+                <li><h4>AppointmentHistories</h4></li>
+                    <ul>
+                        <li>Transactional table of perinatal appointments attended by clients. Serves primarily to record which appointments (with which provider) a particular client has attended. Captures M:N relationships between PerinatalAppointments and Providers as well as between PerinatalAppointments and Clients.</li>
+                        <li>Attibutes:</li>
+                            <ul>
+                                <li>apptHistoryID: int, not NULL, auto_increment, PK</li>
+                                <li>perinatalApptID int, not NULL, FK ON DELETE RESTRICT</li>
+                                <li>providerID: int, FK ON DELETE SET NULL</li>
+                                <li>clientID: int, not NULL, FK ON DELETE CASCADE</li>
+                                <li>date: date, not NULL</li>
+                            </ul>
+                        <li>Relationships:</li>
+                            <ul>
+                                <li>M:1 relationship with Clients. Implemented with clientID as a FK inside AppointmentHistories. An appointment history must have one and only one client. A client may be listed in many appointment histories.</li>
+                                <li>M:1 relationship with PerinatalAppointments implemented with perinatalApptID as a FK inside AppointmentHistories. An appointment history event must have one and only one perinatal appointment. An appointment may be listed in many appointment histories. </li>
+                                <li>M:1 relationship with Providers implemented with providerID as a FK inside AppointmentHistories. An appointment history may have no or one provider. A provider may be listed in many service histories.</li>
+                            </ul>
+                    </ul>
+                <li><h4>NonmedicalEmployees</h4></li>
+                    <ul>
+                        <li>Records the details of nonmedical employees at Seattle Prenatal (i.e., counselors, social workers, doulas, lactation consultants etc.)</li>
+                        <li>Attributes:</li>
+                            <ul>
+                                <li>employeeID: int, not NULL, auto_increment, PK</li>
+                                <li>firstName: varchar(45), not NULL</li>
+                                <li>lastName: varchar(45), not NULL</li>
+                                <li>phone: varchar(45), not NULL</li>
+                                <li>email: varchar(320), not NULL</li>
+                                <li>title: varchar(45), not NULL</li>
+                            </ul>
+                        <li>Relationships:</li>
+                            <ul>
+                                <li>M:N relationship with NonmedicalServices through the intersection table ServiceHistories. A nonmedical employee can lead many nonmedical services and each nonmedical service can be lead by many nonmedical employees.</li>
+                            </ul>
+                    </ul>
+                <li><h4>NonmedicalServices</h4></li>
+                    <ul>
+                        <li>Records details of nonmedical services provided by Seattle Prenatal (i.e., breastfeeding support, legal assistance, personal finance training, nutrition counseling)</li>
+                        <li>Attributes:</li>
+                            <ul>
+                                <li>serviceID: int, not NULL, auto_increment, PK</li>
+                                <li>name: varchar(255), not NULL</li>
+                                <li>description: varchar(255), not NULL</li>
+                            </ul>
+                        <li>Relationships:</li>
+                            <ul>
+                                <li>M:N relationship with NonmedicalEmployees implemented through the intersection table ServiceHistories. </li>
+                                <li>1:M relationship with ServiceHistories.</li>
+                            </ul>
+                    </ul>
+                <li><h4>ServiceHistories</h4></li>
+                    <ul>
+                        <li>Transactional table of nonmedical services attended by clients. Records specific services (led by specific employees) that a client has attended. Captures M:N relationships between NonmedicalServices and Employees, as well as between NonmedicalServices and Clients. </li>
+                        <li>Attibutes:</li>
+                            <ul>
+                                <li>serviceHistoryID: int, not NULL, auto_increment, PK</li>
+                                <li>clientID: int, not NULL, FK ON DELETE CASCADE</li>
+                                <li>serviceID: int, not NULL, FK ON DELETE RESTRICT</li>
+                                <li>employeeID: int, FK ON DELETE SET NULL</li>
+                                <li>date: date, not Null</li>
+                            </ul>
+                        <li>Relationships:</li>
+                            <ul>
+                                <li>M:1 mandatory relationship with Clients. Implemented with clientID as a FK inside Service Histories. A Service History event must have one and only one client. A client may be listed in many service histories.</li>
+                                <li>M:1 relationship with NonmedicalServices implemented with serviceID as a FK inside ServiceHistories. A service history event must have one and only one Nonmedical Service. A service may be listed in many service histories.</li>
+                                <li>M:1 relationship with Nonmedical Employees implemented by inserting an employeeID FK inside ServiceHistories. A service history event may have zero or one Employee. An employee may be listed in many service histories.</li>
+                            </ul>
+                    </ul>
+             </ul>
+        <a href="#top">Top</a>
+        </article>
+        <article id ="entityRelationshipDiagram">
+            <h3> Entity-Relationship Diagram </h3> 
+                <img src="/img/ERD.png" alt="ERD">
+            <a href="#top">Top</a>
+        </article>
+        <article id="schema">
+            <h3> Schema </h3>
+                <img src="/img/SeattlePrenatalSchema.png" alt="Schema">
+            <a href="#top">Top</a>
+        </article>
+         <article id="siteDetails">
+            <h3>About this Site</h3> 
+            <p>This site utilizes the open source relational database management system MariaDB and has been developed with Node.js and express. </p>
+            <a href="#top">Top</a>
+        </article>
+    </section>
+</main>
+

@@ -1,0 +1,259 @@
+<!--Authors: Sonja Lavin, Flora Zhang
+ Contents: Seattle Prenatal Clinic -->
+<!-- Citation for the tables format: 
+Date: 11/09/2023
+Copied from CS340 OSU course:
+Source URL: https://github.com/osu-cs340-ecampus/nodejs-starter-app/tree/main -->
+<!-- Citation for the filters
+Date: 12/4/2023
+Based off CS340 F23 Group 68 step 5 submission
+Source URL: https://edstem.org/us/courses/44903/discussion/3957832 -->
+
+<body>
+<!-- jquery link for delete -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<main>
+    <section>
+          <article>
+             <!-- browse appointment histories table -->
+            <table id="apptHistories-table">
+                <thead>
+                    <caption><h2>Manage Appointment Histories</h2>
+                        <p style="text-align:justify;">
+                            Appointment histories are transactional events that link an individual client with a specific appointment and provider on a specific date. Use this table to Add, Update, Browse, or Delete appointments from a client’s records.
+                        </p>
+                    </caption>
+                    <tr>
+                        <th colspan="3">
+                            <button class="sort" id="toggle-add-form">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#000000" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
+                                </svg> 
+                                Add New
+                            </button>
+                            
+                        </th>
+                        <th colspan="4">
+                            <form class="search-div" id="last-name-search" method='GET' action='/appointmentHistories.html'>
+                                <input type="text" class="search-input" name="lastName" id="lastNameSearch"  placeholder="Search Client Last Name. . .">
+                                <a href='/appointmentHistories.html'>
+                                    <button class="search-clear" id="search-clear">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#000000" d="M125.7 160H176c17.7 0 32 14.3 32 32s-14.3 32-32 32H48c-17.7 0-32-14.3-32-32V64c0-17.7 14.3-32 32-32s32 14.3 32 32v51.2L97.6 97.6c87.5-87.5 229.3-87.5 316.8 0s87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3s-163.8-62.5-226.3 0L125.7 160z"/></svg>
+                                    </button>
+                                </a>
+                            </form>     
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>ID
+                            <button class="sort" onclick="sortTable(0)">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#666666}</style><path d="M450.7 38c8.3 6 13.3 15.7 13.3 26v96h16c17.7 0 32 14.3 32 32s-14.3 32-32 32H432 384c-17.7 0-32-14.3-32-32s14.3-32 32-32h16V108.4l-5.9 2c-16.8 5.6-34.9-3.5-40.5-20.2s3.5-34.9 20.2-40.5l48-16c9.8-3.3 20.5-1.6 28.8 4.4zM160 32c9 0 17.5 3.8 23.6 10.4l88 96c11.9 13 11.1 33.3-2 45.2s-33.3 11.1-45.2-2L192 146.3V448c0 17.7-14.3 32-32 32s-32-14.3-32-32V146.3L95.6 181.6c-11.9 13-32.2 13.9-45.2 2s-13.9-32.2-2-45.2l88-96C142.5 35.8 151 32 160 32zM445.7 364.9A32 32 0 1 0 418.3 307a32 32 0 1 0 27.4 57.9zm-40.7 54.9C369.6 408.4 344 375.2 344 336c0-48.6 39.4-88 88-88s88 39.4 88 88c0 23.5-7.5 46.3-21.5 65.2L449.7 467c-10.5 14.2-30.6 17.2-44.8 6.7s-17.2-30.6-6.7-44.8l6.8-9.2z"/></svg>
+                            </button>
+                        </th>
+                        <th>Client
+                            <button class="sort" onclick="sortTable(1)">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#000000}</style><path d="M183.6 42.4C177.5 35.8 169 32 160 32s-17.5 3.8-23.6 10.4l-88 96c-11.9 13-11.1 33.3 2 45.2s33.3 11.1 45.2-2L128 146.3V448c0 17.7 14.3 32 32 32s32-14.3 32-32V146.3l32.4 35.4c11.9 13 32.2 13.9 45.2 2s13.9-32.2 2-45.2l-88-96zM320 320c0 17.7 14.3 32 32 32h50.7l-73.4 73.4c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H429.3l73.4-73.4c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8H352c-17.7 0-32 14.3-32 32zM416 32c-12.1 0-23.2 6.8-28.6 17.7l-64 128-16 32c-7.9 15.8-1.5 35 14.3 42.9s35 1.5 42.9-14.3l7.2-14.3h88.4l7.2 14.3c7.9 15.8 27.1 22.2 42.9 14.3s22.2-27.1 14.3-42.9l-16-32-64-128C439.2 38.8 428.1 32 416 32zM395.8 176L416 135.6 436.2 176H395.8z"/></svg>
+                            </button>
+                        </th>
+                        <th>Appointment
+                            <button class="sort" onclick="sortTable(2)">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#000000}</style><path d="M183.6 42.4C177.5 35.8 169 32 160 32s-17.5 3.8-23.6 10.4l-88 96c-11.9 13-11.1 33.3 2 45.2s33.3 11.1 45.2-2L128 146.3V448c0 17.7 14.3 32 32 32s32-14.3 32-32V146.3l32.4 35.4c11.9 13 32.2 13.9 45.2 2s13.9-32.2 2-45.2l-88-96zM320 320c0 17.7 14.3 32 32 32h50.7l-73.4 73.4c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H429.3l73.4-73.4c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8H352c-17.7 0-32 14.3-32 32zM416 32c-12.1 0-23.2 6.8-28.6 17.7l-64 128-16 32c-7.9 15.8-1.5 35 14.3 42.9s35 1.5 42.9-14.3l7.2-14.3h88.4l7.2 14.3c7.9 15.8 27.1 22.2 42.9 14.3s22.2-27.1 14.3-42.9l-16-32-64-128C439.2 38.8 428.1 32 416 32zM395.8 176L416 135.6 436.2 176H395.8z"/></svg>
+                            </button></th>
+                        <th>Date<button class="sort" onclick="sortTable(3)">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#000000}</style><path d="M128 0c17.7 0 32 14.3 32 32V64H288V32c0-17.7 14.3-32 32-32s32 14.3 32 32V64h48c26.5 0 48 21.5 48 48v48H0V112C0 85.5 21.5 64 48 64H96V32c0-17.7 14.3-32 32-32zM0 192H448V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm64 80v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm128 0v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H208c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H336zM64 400v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H208zm112 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H336c-8.8 0-16 7.2-16 16z"/></svg>
+                            </button></th>
+                        <th>Provider<button class="sort" onclick="sortTable(4)">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M183.6 42.4C177.5 35.8 169 32 160 32s-17.5 3.8-23.6 10.4l-88 96c-11.9 13-11.1 33.3 2 45.2s33.3 11.1 45.2-2L128 146.3V448c0 17.7 14.3 32 32 32s32-14.3 32-32V146.3l32.4 35.4c11.9 13 32.2 13.9 45.2 2s13.9-32.2 2-45.2l-88-96zM320 320c0 17.7 14.3 32 32 32h50.7l-73.4 73.4c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H429.3l73.4-73.4c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8H352c-17.7 0-32 14.3-32 32zM416 32c-12.1 0-23.2 6.8-28.6 17.7l-64 128-16 32c-7.9 15.8-1.5 35 14.3 42.9s35 1.5 42.9-14.3l7.2-14.3h88.4l7.2 14.3c7.9 15.8 27.1 22.2 42.9 14.3s22.2-27.1 14.3-42.9l-16-32-64-128C439.2 38.8 428.1 32 416 32zM395.8 176L416 135.6 436.2 176H395.8z"/></svg>
+                            </button>
+                            <button class="sort" id="filter-button">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#000000" d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/></svg>
+                                </button>
+                     
+                        <th colspan="2"> 
+                            <form id="filter-dropdown" class="hidden" method="GET" action='/appointmentHistories.html'>
+                            <select name="filter-provider" id="filter-provider" onchange="applyFilter();"> 
+                                <option value="" disable selected>Filter by Provider</option>
+                                <option value="all">All Providers</option>
+                                {{#each providers}}
+                                <option value="{{this.providerID}}">{{this.Provider}}</option>
+                                {{/each}}
+                                <option value="null">No Providers</option>
+                            </select>
+                            </form>
+                            </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each data}}
+                    <tr data-value={{this.ID}}>
+                        <td>{{this.ID}}</td>
+                        <td>{{this.Client}}</td>
+                        <td>{{this.Appointment}}</td>
+                        <td>{{this.Date}}</td>
+                        <td>{{this.Provider}}</td>
+                        
+                        <td> 
+                            <button class="sort" onclick="deleteAppointmentHistory({{this.ID}}, '{{this.Client}}', '{{this.Appointment}} appointment with {{this.Provider}} on {{this.Date}}')">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#000000}</style><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>
+                                </button>
+                        </td>
+                        <td>
+                            <button class="sort" onclick="updateAppointmentHistory({{this.ID}})">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#000000}</style><path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z"/></svg>
+                                </button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <!-- link to javascript that handles delete using AJAX -->
+            <script src="./js/delete_apptHistory.js"></script>
+            </article>
+           
+            <article>
+            <div id="add-container">
+            <!-- hidden add form using AJAX -->
+                <form id="add-appointmentHistory-form-ajax">
+                    <h3>Add Appointment History</h3>
+                        <p>To add a appointment to a client's history, please enter the information below and click 'Save'.</p>
+                    <fieldset>                       
+                        <legend>Appointment History</legend>
+                        <label for="input-client">Client: </label>
+                        <select name="input-client" id="myClientSelect" required> 
+                            <option value ="Null">Client</option>
+                            {{#each clients}}
+                            <option value="{{this.clientID}}">{{this.Client}}</option>
+                            {{/each}}
+                            </select>
+
+                        <label for="input-appointment">Appointment: </label>
+                        <select name="input-appointment" id="myAppointmentSelect" required> 
+                            <option value ="Null">Appointment</option>
+                            {{#each appointments}}
+                            <option value="{{this.perinatalApptID}}">{{this.Appointment}}</option>
+                            {{/each}}
+                            </select>
+                        
+                        <label for="input-provider">Provider: </label>
+                        <select name="input-provider" id="myProviderSelect" required> 
+                            <option value="Null" disabled selected>Provider</option>
+                            {{#each providers}}
+                            <option value="{{this.providerID}}">{{this.Provider}}</option>
+                            {{/each}}
+                            <option value="Null">No Provider</option>
+                            </select>
+                        
+                        <label for="input-date">Date: </label>
+                        <input type="date" name="input-date" id="input-date" required>
+            
+                        <input class="btn" type="submit" id="UpdateSaveAppointmentHistory" value="Save"> 
+                        <button class="btn" type="button" id="cancelUpdateAppointment" onclick="window.location.reload(true);">Cancel</button>
+                    </fieldset>
+                </form>
+            <!-- link to javascript to handle add service history -->
+            <script src="./js/add_apptHistory.js"></script>
+            </div>
+            </article>
+            <article>
+                <!-- Hidden form for update Appointment history -->
+                <form id="update-appointmentHistory-form-ajax" style="display: none;">
+                    <h3>Update An Appointment History</h3>
+                        <p id="update-instruction"></p>
+                <fieldset>
+                    <legend>Appointment History</legend>
+                    <!-- Fields for updating -->
+                    <label for="input-client">Client: </label>
+                        <select name="input-client" id="input-client"> 
+                            <option value="client">Client</option>
+                            {{#each clients}}
+                            <option value="{{this.clientID}}">{{this.Client}}</option>
+                            {{/each}}
+                            </select>
+
+                        <label for="input-appointment">Appointment: </label>
+                            <select name="input-appointment" id="input-appointment" required> 
+                            <option value="appointment">Appointment</option>
+                            {{#each appointments}}
+                            <option value="{{this.perinatalApptID}}">{{this.Appointment}}</option>
+                            {{/each}}
+                            </select>
+                            
+                        <label for="input-provider">Provider: </label>
+                            <select name="input-provider" id="input-provider"> 
+                            <option value="Null" disabled selected>Provider</option>
+                            {{#each providers}}
+                            <option value="{{this.providerID}}">{{this.Provider}}</option>
+                            {{/each}}
+                            <option value="Null">No Provider</option>
+                            </select>
+
+                    <label for="update-date">Date: </label>
+                    <input type="date" name="update-date" id="update-date">
+                
+
+                    <input class="btn" type="submit" id="update-AppointmentHistory" value="Update">
+                    <button class="btn" type="button" id="cancelUpdateAppointment" onclick="window.location.href='#top'; window.location.reload(true);">Cancel</button>
+                </fieldset>
+                </form>
+                <!-- link to script to handle updating service history -->
+                <script src="./js/update_apptHistory.js"></script>
+            </article>
+        </section>
+    </main>
+</body>
+        
+<script>
+//------------------- script for displaying filter drop down ----------------------
+document.getElementById('filter-button').addEventListener('click', function() {
+    
+var filterDropdown = document.getElementById('filter-dropdown');
+filterDropdown.classList.toggle('hidden');   
+});
+
+function applyFilter() {
+    // Get the selected value from the filter dropdown
+    const selectedProviderID = document.getElementById('filter-provider').value;
+
+    // Construct the URL with the filter parameter
+    let filterURL = '/appointmentHistories.html';
+
+    // Append the filter parameter only if a provider is selected
+    if (selectedProviderID !== 'all') {
+        filterURL += `?providerID=${selectedProviderID}`;
+                }
+
+        // Redirect to the constructed URL
+            window.location.href = filterURL;
+            }
+
+// ----------------------- script to sort table --------------------------------
+         
+            function sortTable(columnIndex) {
+            var table, rows, switching, i, x, y, shouldSwitch, xVal, yVal;
+            table = document.getElementById("apptHistories-table");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 2; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[columnIndex];
+                    y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+
+                    // Check if the cells contain numeric or string values
+                    xVal = isNaN(x.innerHTML) ? x.innerHTML.toLowerCase() : parseFloat(x.innerHTML);
+                    yVal = isNaN(y.innerHTML) ? y.innerHTML.toLowerCase() : parseFloat(y.innerHTML);
+
+                    if (xVal > yVal) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+</script>
+   

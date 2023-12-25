@@ -1,0 +1,26 @@
+{
+  "name": "cs340_step4",
+  "version": "1.0.0",
+  "description": "demo site to manage relational datablase",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mySQL",
+    "mariaDB",
+    "Node.JS"
+  ],
+  "author": "Sonja Lavin",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-handlebars": "^7.1.2",
+    "forever": "^4.0.3",
+    "mysql": "^2.18.1",
+    "mysql-import": "^5.0.26",
+    "nodemon": "^3.0.1"
+  },
+  "devDependencies": {}
+}
